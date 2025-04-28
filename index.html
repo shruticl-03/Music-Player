@@ -40,6 +40,27 @@
         let song = document.getElementById("song");
         let ctrlIcon = document.getElementById("ctrlIcon");
 
+        let songs = [
+            {
+                name: "Yeh Raaten Yeh Mausam",
+                artist: "Sanam, Simran Sehgal",
+                img: "media/thumbnail1.png",
+                src: "media/Yeh Raaten Yeh Mausam.mp3"
+            },
+            {
+                name: "Baarish",
+                artist: "Shashaa Tirupati",
+                img: "media/Half-Girlfriend.jpg",
+                src: "media/Baarish.mp3"
+            },
+            {
+                name: "Agar Tum Saath Ho",
+                artist: "Arjith Singh and Alka Yagnik",
+                img: "media/tum sath.jpeg",
+                src: "media/Agar Tum Saath Ho.mp3"
+            }
+        ];
+
         song.onloadedmetadata = function () {
             progress.max = song.duration;
             progress.value = song.currentTime;
