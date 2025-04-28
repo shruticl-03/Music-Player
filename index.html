@@ -13,33 +13,48 @@
     <div class="container">
         <div class="music-player">
             <nav>
-                <div class="circle">
+                <div class="circle" onclick="prevSong()">
                     <i class="fa-solid fa-angle-left"></i>
                 </div>
                 <div class="circle">
                     <i class="fa-solid fa-bars"></i>
                 </div>
             </nav>
-            <img src="media/thumbnail1.png" class="song-img">
-            <h1>Yeh Raaten Yeh Mausam</h1>
-            <p>Sanam, Simran Sehgal</p>
+
+            <img src="media/thumbnail1.png" class="song-img" alt="Song Thumbnail">
+            <h1 id="song-title">Yeh Raaten Yeh Mausam</h1>
+            <p id="song-artist">Sanam, Simran Sehgal</p>
+
             <audio id="song">
                 <source src="media/Yeh Raaten Yeh Mausam.mp3" type="audio/mpeg">
             </audio>
-            <input type="range" value="0" id="progress">
-            <div class="controls">
-                <div><i class="fa-solid fa-backward"></i></div>
-                <div onclick="playPause()"><i class="fa-solid fa-play" id="ctrlIcon"></i></div>
-                <div><i class="fa-solid fa-forward"></i></div>
-            </div>
-        </div>
 
+            <input type="range" id="progress" value="0">
+
+            <div class="controls">
+                <div onclick="prevSong()">
+                    <i class="fa-solid fa-backward"></i>
+                </div>
+                <div onclick="playPause()">
+                    <i class="fa-solid fa-play" id="ctrlIcon"></i>
+                </div>
+                <div onclick="nextSong()">
+                    <i class="fa-solid fa-forward"></i>
+                </div>
+            </div>
+
+        </div>
     </div>
+
     <script>
         let progress = document.getElementById("progress");
         let song = document.getElementById("song");
         let ctrlIcon = document.getElementById("ctrlIcon");
+        let songTitle = document.getElementById("song-title");
+        let songArtist = document.getElementById("song-artist");
+        let songImg = document.querySelector(".song-img");
 
+        // Songs list
         let songs = [
             {
                 name: "Yeh Raaten Yeh Mausam",
@@ -61,37 +76,66 @@
             }
         ];
 
-        song.onloadedmetadata = function () {
-            progress.max = song.duration;
-            progress.value = song.currentTime;
+        let currentSong = 0;
+
+        // Load song function
+        function loadSong(index) {
+            song.src = songs[index].src;
+            songTitle.textContent = songs[index].name;
+            songArtist.textContent = songs[index].artist;
+            songImg.src = songs[index].img;
+            song.load();
+            song.play();
+            ctrlIcon.classList.remove("fa-play");
+            ctrlIcon.classList.add("fa-pause");
         }
+
+        // Play/Pause
         function playPause() {
-            if (ctrlIcon.classList.contains("fa-pause")) {
+            if (song.paused) {
+                song.play();
+                ctrlIcon.classList.remove("fa-play");
+                ctrlIcon.classList.add("fa-pause");
+            } else {
                 song.pause();
                 ctrlIcon.classList.remove("fa-pause");
                 ctrlIcon.classList.add("fa-play");
-
             }
-            else {
-                song.play();
-                ctrlIcon.classList.add("fa-pause");
-                ctrlIcon.classList.remove("fa-play");
-            }
-
         }
 
-        if (song.play()) {
-            setInterval(() => {
+        // Next Song
+        function nextSong() {
+            currentSong++;
+            if (currentSong >= songs.length) {
+                currentSong = 0;
+            }
+            loadSong(currentSong);
+        }
+
+        // Previous Song
+        function prevSong() {
+            currentSong--;
+            if (currentSong < 0) {
+                currentSong = songs.length - 1;
+            }
+            loadSong(currentSong);
+        }
+
+        // Progress bar update
+        song.addEventListener('timeupdate', () => {
+            if (!isNaN(song.duration)) {
                 progress.value = song.currentTime;
-            }, 500);
+                progress.max = song.duration;
+            }
+        });
 
-        }
-        progress.onchange = function () {
-            song.play();
+        // Seek through the song
+        progress.oninput = function () {
             song.currentTime = progress.value;
-            ctrlIcon.classList.add("fa-pause");
-            ctrlIcon.classList.remove("fa-play");
-        }
+        };
+
+        // When song ends automatically go to next
+        song.addEventListener('ended', nextSong);
 
     </script>
 </body>
