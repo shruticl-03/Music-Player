@@ -20,6 +20,7 @@ JavaScript (Vanilla) – Interactivity and logic
 https://musicplayer-shruti.netlify.app/
 
 📸 Preview
+
 ![image](https://github.com/user-attachments/assets/49130eb6-4a6d-4a89-be14-d61020d52e48)
 
 
@@ -34,6 +35,8 @@ Clone the repo: https://github.com/shruticl-03/Music-Player.git
 bash
 Copy
 Edit
+
+
 git clone https://github.com/shruticl-03/Music-Player.git
 cd music-player
 Open in browser:
